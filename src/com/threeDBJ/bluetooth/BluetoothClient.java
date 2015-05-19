@@ -25,11 +25,13 @@ public interface BluetoothClient {
     public static int LINE_ACK=77, LINE_NACK=78;
 
     /* Bundle keys */
+    public static final String DEVICE_ADDRESS = "device_address";
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
 
     /* State change message commands */
     public static final int MESSAGE_STATE_CHANGE = 200;
+    public static final int MESSAGE_DEVICE_ADDRESS = 202;
     public static final int MESSAGE_DEVICE_NAME = 203;
     public static final int MESSAGE_TOAST = 204;
 

@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.UUID;
 
 import android.bluetooth.BluetoothAdapter;
@@ -166,6 +167,25 @@ public class BluetoothService {
     }
 
     /**
+     * Attempt to connect to a previously paired device based on it's BDADDR
+     * @param bdaddr The BDADDR of the target BluetoothDevice
+     * @param secure Socket Security type - Secure (true) , Insecure (false)
+     * @return true if paired device with matching BDADDR was found, false otherwise
+     */
+    public boolean connectToAddress(String bdaddr, boolean secure) {
+        if(bdaddr == null) return false;
+        Set<BluetoothDevice> devices = btAdapter.getBondedDevices();
+        for(BluetoothDevice device : devices) {
+            DebugLog.e(TAG, device.getAddress());
+            if(bdaddr.equals(device.getAddress())) {
+                connect(device, secure);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Start the ConnectedThread to begin managing a Bluetooth connection
      * @param socket  The BluetoothSocket on which the connection was made
      * @param device  The BluetoothDevice that has been connected
@@ -186,6 +206,7 @@ public class BluetoothService {
         if(client != null) {
             Message msg = handler.obtainMessage(BluetoothClient.MESSAGE_DEVICE_NAME);
             Bundle bundle = new Bundle();
+            bundle.putString(BluetoothClient.DEVICE_ADDRESS, device.getAddress());
             bundle.putString(BluetoothClient.DEVICE_NAME, device.getName());
             msg.setData(bundle);
             handler.sendMessage(msg);
