@@ -98,6 +98,7 @@ public abstract class BluetoothActivity extends FragmentActivity {
      * @param data The intent returned from a setResult(int, Intent) call, or null
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_ENABLE_BT) {
             if(resultCode == RESULT_OK) {
             } else {
